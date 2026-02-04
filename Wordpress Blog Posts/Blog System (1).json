@@ -1,0 +1,1050 @@
+{
+  "name": "Blog System",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "fab124d5-1017-41c4-9a06-f6b4d13385dc",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -416,
+        176
+      ],
+      "id": "77f29d98-cbd3-4c9a-a088-36121e271882",
+      "name": "Webhook",
+      "webhookId": "fab124d5-1017-41c4-9a06-f6b4d13385dc"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0b6f354a-cb94-4138-85a2-585353a7c871",
+              "leftValue": "={{ $json.body.value }}",
+              "rightValue": "TRUE",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -192,
+        176
+      ],
+      "id": "bdf16a8a-6631-440b-8024-a4859477a1b7",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.range.columnStart }}",
+                    "rightValue": 3,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    },
+                    "id": "6471813a-afd1-41a2-a04b-3dff9533d8c0"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "5dd0e698-f99c-42c6-9ad5-d227246742db",
+                    "leftValue": "={{ $json.body.range.columnStart }}",
+                    "rightValue": 4,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        32,
+        176
+      ],
+      "id": "7ccf9a1c-7f96-4eb0-b497-aa503e535ce6",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "topic",
+              "value": "={{ $('Webhook').item.json.body.rowValues[0]['0'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        184,
+        -160
+      ],
+      "id": "12345678-1234-1234-1234-123456789abc",
+      "name": "Data Mapping"
+    },
+    {
+      "parameters": {
+        "model": "sonar-pro",
+        "messages": {
+          "message": [
+            {
+              "content": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('message0_Text', `Please search for the keyword`, 'string') }}"
+            }
+          ]
+        },
+        "options": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.perplexityTool",
+      "typeVersion": 1,
+      "position": [
+        480,
+        96
+      ],
+      "id": "7f5aee42-39d7-45e0-a757-b4bfdba4a920",
+      "name": "Message a model in Perplexity"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "message.content.blog_post_images",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1776,
+        32
+      ],
+      "id": "b4de76b1-2ff8-475f-a685-2403c70c43f9",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        2448,
+        32
+      ],
+      "id": "ca66c7c5-57e8-47e7-95bc-6d996ca57306",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "title": "={{ $('SEO Optimization').first().json.message.content.title }}",
+        "additionalFields": {
+          "authorId": 2,
+          "content": "={{ $json.message.content }}",
+          "slug": "={{ $('SEO Optimization').first().json.message.content.slug }}",
+          "status": "draft",
+          "format": "standard",
+          "postTemplate": {
+            "values": {
+              "template": "elementor_header_footer"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.wordpress",
+      "typeVersion": 1,
+      "position": [
+        3216,
+        32
+      ],
+      "id": "21299777-05ea-4174-9aee-70940610af35",
+      "name": "Create a post",
+      "credentials": {
+        "wordpressApi": {
+          "id": "7zkLSOBlq7RdKivP",
+          "name": "Wordpress account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1_w9v4aT-yM29C_TcCWOLRzKitE6k3FUSjyNJko7anc8",
+          "mode": "list",
+          "cachedResultName": "wordpress blog post example",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_w9v4aT-yM29C_TcCWOLRzKitE6k3FUSjyNJko7anc8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_w9v4aT-yM29C_TcCWOLRzKitE6k3FUSjyNJko7anc8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Blog Link": "={{ $('Create a post').item.json.link }}",
+            "Image Link": "={{ $('Aggregate').item.json.data[0].guid.rendered }}",
+            "Create": "TRUE",
+            "Keyword": "={{ $('Webhook').first().json.body.rowValues[0]['0'] }}",
+            "Instagram Caption": "={{ $json.message.content.instagram_post }}",
+            "Twitter Caption": "={{ $json.message.content.x_post }}",
+            "Facebook": "={{ $json.message.content.facebook_post }}",
+            "TikTok": "={{ $json.message.content.tiktok_post }}",
+            "Linkedin": "={{ $json.message.content.linkedin_post }}"
+          },
+          "matchingColumns": [
+            "Keyword"
+          ],
+          "schema": [
+            {
+              "id": "Keyword",
+              "displayName": "Keyword",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Create",
+              "displayName": "Create",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Social Media",
+              "displayName": "Social Media",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Image Link",
+              "displayName": "Image Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Blog Link",
+              "displayName": "Blog Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Social Media Link",
+              "displayName": "Social Media Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Twitter Caption",
+              "displayName": "Twitter Caption",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Instagram Caption",
+              "displayName": "Instagram Caption",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Facebook",
+              "displayName": "Facebook",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Linkedin",
+              "displayName": "Linkedin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "TikTok",
+              "displayName": "TikTok",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        4064,
+        32
+      ],
+      "id": "fe79c5e7-a06b-4bd9-8ec8-2c7a720cd80c",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YWi1qwxwemr9Mvh4",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        320,
+        64
+      ],
+      "id": "3790c7c5-3b2c-4e86-8b4d-a449900a89b4",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "BUvioYJhKHwy72WU",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are an expert SEO copywriter. Your task is to rewrite the input text to match a specified **writing style** while optimizing it for the given **SEO keywords**.  \n\nYour output should:\n- Retain the original meaning and intent.  \n- Follow the requested writing style (e.g., formal, casual, persuasive, punchy, friendly), changing the least amount possible\n- Naturally and effectively include the provided SEO keywords, without stuffing.  \n- Use proper grammar and smooth transitions.  \n- Be engaging and easy to read.  \n\nReturn only the improved version of the text.  \n\n\n## ✅ Output Behavior\n\n- Rewritten in the defined style  \n- Keywords naturally embedded  \n- Clear, engaging copy\n\n",
+              "role": "system"
+            },
+            {
+              "content": "=Please write this blog in the style above:\n{{ $json.message.content }}"
+            },
+            {
+              "content": "Please output the data in the following JSON format:\n\n{\n\"title\": \"\", // 3-8 word blog post title\n\"blog_post\": \"\" // blog post\n\"slug\": \"\", // end of url\n\"twitter_caption\": \"\"\n}",
+              "role": "assistant"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        976,
+        -160
+      ],
+      "id": "b232a4d4-9ea4-43f6-b095-bcbde4a007d3",
+      "name": "SEO Optimization",
+      "credentials": {
+        "openAiApi": {
+          "id": "SeDUiAJYJHLCS9Pi",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=# 🎤 Blog Tone & Style Guide: “Entertain While You Educate”\n\n## 🎭 Voice & Personality\nYou are a **witty, self-aware writer** who combines dad jokes, pop culture references, and playful sarcasm with surprisingly clear and insightful content. Think: cheeky uncle meets thoughtful mentor. You’re the fun teacher who makes even boring topics (yes, even accounting) feel like a stand-up set — with homework.\n\n## 🧑‍🏫 Writing Style Guidelines\n- **Start strong** with a humorous hook, quirky anecdote, or painfully good pun. First impressions count — make ‘em laugh or raise an eyebrow.\n- Make **self-deprecating remarks** or poke fun at the topic (“I know, plumbing isn’t exactly Netflix material, but stick with me…”).\n- Pepper in **references to hypothetical kids, confused readers, or your own inner monologue** (“My 7-year-old asked if I was done talking about tax deductions. I said ‘never.’”).\n- Keep the tone **conversational and casual**, using phrases like:\n  - “Let’s be real…”\n  - “You feel me?”\n  - “*cue dramatic pause*”\n  - “Hot take coming in 3…2…1”\n- Use **rhetorical questions** and break the fourth wall often to engage the reader directly (“Still reading? Wow. You’re officially my favorite.”).\n- **Switch gears** gracefully into serious educational content when needed — but always with a wink, smirk, or a side of sass.\n- **End each section with a clever or warm takeaway** — like a funny professor wrapping up class with “and yes, this *will* be on the test.”\n\n## 🔁 Tone Shift Examples\n- When talking numbers:  \n  “Now, before your eyes glaze over like a Krispy Kreme, let’s break down this balance sheet…”\n- When dropping facts:  \n  “Here’s the boring part. Just kidding — it’s actually kinda cool. Or maybe I’ve been doing this too long.”\n\n## ✨ Your Mission\nTo **entertain while educating** — and maybe, just maybe, help someone laugh *and* learn something. If readers feel like they’re being taught by a quirky, lovable uncle who moonlights as a life coach? Nailed it. \nPlease do not include intros or outros\n",
+              "role": "system"
+            },
+            {
+              "content": "=Please write this blog in the style above:\n{{ $json.output }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        656,
+        -160
+      ],
+      "id": "8c3f9407-9443-433a-ac15-1f4bd09d18e2",
+      "name": "Blog Tone Match",
+      "credentials": {
+        "openAiApi": {
+          "id": "SeDUiAJYJHLCS9Pi",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You're goal is to analyze a blog post, and identify all the major sections, so that we can create ChatGPT prompts to generate images for each section. Please limit it to 4 pictures/4 sections.",
+              "role": "system"
+            },
+            {
+              "content": "={{ $json.message.content.blog_post }}"
+            },
+            {
+              "content": "=Please output the following data in JSON format with the following structure:\n{\n\"blog_post_images\": [\n\"\"\n]\n}",
+              "role": "assistant"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        1408,
+        32
+      ],
+      "id": "44733872-66ac-4232-ae26-2e54bcdd1fc1",
+      "name": "Image Prompts",
+      "credentials": {
+        "openAiApi": {
+          "id": "SeDUiAJYJHLCS9Pi",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash-image-preview",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash-image-preview (Nano Banana)"
+        },
+        "prompt": "=You are a high-quality, realistic image generator for a modern plumbing blog with a humorous, relatable tone.\n\nAlways generate images in this consistent style:\n\n• 📸 Style: High-resolution, realistic photography — looks like stock photos but with a twist\n• 💡 Lighting: Soft indoor or natural daylight, clean and bright\n• 🎨 Color Palette: Neutral tones with soft blues, whites, stainless steel or copper plumbing accents\n• 🏠 Setting: Residential bathroom, kitchen, or utility room — clean, believable environments\n• 🎭 Mood: Lighthearted, ironic, or exaggerated frustration — like a comedic stock photo\n• 👨‍🔧 Characters: Everyday homeowners or plumbers, expressive and over-the-top reactions (e.g., surprise, despair, triumph)\n• 🧰 Props: Wrenches, plungers, buckets, exaggerated water leaks, towels, rubber ducks, etc.\n• 📐 Composition: Medium or wide shots, minimal clutter, story clearly visible in one glance\n\nInject humor through **facial expressions**, **body language**, or **silly-but-relatable situations** — while keeping the image looking like it belongs on a professional blog.\n\nNow generate:\n{{ $json['message.content.blog_post_images'] }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        2000,
+        32
+      ],
+      "id": "944e1318-7cb4-405f-9a69-d4519e22702c",
+      "name": "Generate an image1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "BUvioYJhKHwy72WU",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a professional blog designer that is an expert in making blog posts beautiful. Your goal is to transform plain text blog posts into aesthetically stunning, clean, styled HTML for use in Elementor on WordPress.\n\nFollow these exact rules:\n\n1. Wrap the entire blog post in clean, valid HTML — no escape characters, no control characters.\n2. Include the blog post title as an `<h1>` at the top.\n3. Break the content into sections using `<h2>` or `<h3>` tags, as appropriate.\n4. Insert an `<img>` placeholder with an appropriate alt text and unique filename (e.g., `plumbing-leak.jpg`) above each main section.\n5. Use simple inline CSS for basic styling (e.g., font family, colors, padding), compatible with Wordpress & Elementor defaults.\n6. Do **not** include any intros, disclaimers, or extra messages. Only return the final HTML content.\n7. Preserve all apostrophes, quotes, em dashes, and punctuation properly — no escape sequences or unicode junk.\n8. Keep the tone and humor of the original content intact.\n9. Make sure to use the full URL absolute path\n10. Always make sure make the blog post stunning\n11. It must be valid HTML everytime! The response MUST start with <!DOCTYPE html>. NEVER start it with ```html\n12. Please make sure the images are always full height. Don't cut them off",
+              "role": "system"
+            },
+            {
+              "content": "=Title: {{ $('SEO Optimization').first().json.message.content.title }}\n\nBlog post:\n{{ $('SEO Optimization').first().json.message.content.blog_post }}\n\nImage captions - each image is separated by commas:\n{{ $('Image Prompts').first().json.message.content.blog_post_images }}\n\n{{ $json.data[0].guid.rendered }}\n{{ $json.data[1].guid.rendered }}\n{{ $json.data[2].guid.rendered }}\n{{ $json.data[3].guid.rendered }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        2816,
+        32
+      ],
+      "id": "497b218a-71fc-4df1-a43c-aef539e605aa",
+      "name": "Blog Aesthetics ",
+      "credentials": {
+        "openAiApi": {
+          "id": "SeDUiAJYJHLCS9Pi",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You're an expert at creating captions for social media platforms such as: Instagram, X, LinkedIn, Facebook, and TikTok, around a blog post that we generated. The goal is to increase the amount of people viewing the blog post",
+              "role": "system"
+            },
+            {
+              "content": "={{ $('SEO Optimization').first().json.message.content.blog_post }}"
+            },
+            {
+              "content": "Please output the data in the following JSON format:\n\n{\n  \"instagram_post\": \"\",\n  \"x_post\": \"\",\n  \"facebook_post\": \"\",\n  \"linkedin_post\": \"\",\n  \"tiktok_post\": \"\"\n}\n",
+              "role": "assistant"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        3680,
+        32
+      ],
+      "id": "19d95896-b324-4e6f-879e-4de8e933da3d",
+      "name": "Social media content creation",
+      "credentials": {
+        "openAiApi": {
+          "id": "SeDUiAJYJHLCS9Pi",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Please create a blog post on this topic:\n{{ $json.topic }}",
+        "options": {
+          "systemMessage": "=# ✍️ Blog Article Generator (1,000+ Words, Retention-Optimized)\n\n## 🎯 Role & Purpose  \nYou are a professional blog writer AI. Your job is to write **engaging, well-structured, and research-backed blog articles** that are designed to hold attention and provide real value.\n\n## ✅ Primary Objectives  \nFor every blog post you create:\n- **Start by conducting a real-time search using the Perplexity tool** to gather the most recent, accurate, and relevant insights, data, and examples.\n- Tailor the content to the **knowledge level, interests, and needs of the target audience**.\n- Ensure the article is **a minimum of 1,000 words** to provide depth and SEO value.\n\n## 🧠 Writing Guidelines  \nEach blog article must:\n- Begin with a **compelling introduction** that clearly explains the importance of the topic and hooks the reader in the first few lines.\n- Maintain a **conversational, professional, and easy-to-follow tone** — avoid jargon and overly academic language.\n- Include **real-world examples, case studies, statistics, or quotes**, with accurate source attribution (e.g., “according to [source]”).\n- Be organized with:\n  - **Descriptive H2 and H3 headers**\n  - **Short paragraphs and skimmable formatting**\n  - **Bullet points or numbered lists** where appropriate\n- Use **sparingly placed emojis (1–3 max)** only if relevant to tone or clarity.\n- Conclude with a **strong closing section** that:\n  - Recaps key takeaways\n  - Provides suggested next steps or further reading\n  - Optionally includes links to tools, guides, or calls-to-action\n\n## ⚙️ Output Rules  \n- Output only the **final blog article text** — do not include planning notes, commentary, or explanations.  \n- Write the full article in **Markdown format**, with clear section headers (`##`, `###`, etc.).\n- Ensure the blog post is **at least 1,000 words** long.\n\n## 🧪 Workflow Summary  \n1. Accept the user’s topic (e.g., “The ROI of warehouse automation”)  \n2. Conduct a Perplexity-powered search to gather timely insights, examples, and supporting data  \n3. Write a complete blog article using the structure and tone above  \n4. Output only the final article (no additional comments or context)\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        336,
+        -160
+      ],
+      "id": "c5ce0bd4-bfc5-4b06-8fd0-7ee56e969333",
+      "name": "Create blog post agent"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://backend.blotato.com/v2/media",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "blotato-api-key",
+              "value": "blt_laHss1J0Xuy2jDJEassynAjxmy9XhtIMCO+kGMfpnmA="
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"url\": \"{{ $('Webhook').item.json.body.rowValues[0]['4'] }}\"\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        304,
+        512
+      ],
+      "id": "c2ddb753-0c37-4c13-b1a7-31bbcc6e181d",
+      "name": "Create post in blotato"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://backend.blotato.com/v2/posts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "blotato-api-key",
+              "value": "blt_laHss1J0Xuy2jDJEassynAjxmy9XhtIMCO+kGMfpnmA="
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"post\": {\n    \"accountId\": \"4612\",\n    \"content\": {\n      \"text\": \"{{ $('Webhook').item.json.body.rowValues[0]['7'] }}\",\n      \"mediaUrls\": [\"{{ $json.url }}\"],\n      \"platform\": \"twitter\"\n    },\n    \"target\": {\n      \"targetType\": \"twitter\"\n    }\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        656,
+        512
+      ],
+      "id": "01d69adb-e4b7-48c4-a3a6-8fef2afb2e96",
+      "name": "Publish on twitter"
+    },
+    {
+      "parameters": {
+        "content": "# Create and Publish on Twitter via Blotato ",
+        "height": 352,
+        "width": 768,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        384
+      ],
+      "id": "c200b64c-b70c-4a00-80bc-5846d851edd2",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "# Create BLog Post",
+        "height": 560,
+        "width": 1008
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        -272
+      ],
+      "id": "50700292-8297-4f79-9cdc-3811b0ad7cc0",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "# Create and Save Images",
+        "height": 560,
+        "width": 1312,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1296,
+        -272
+      ],
+      "id": "f37654f5-a1c8-4814-be1a-a37f83589fdc",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://djing.ca/wp-json/wp/v2/media",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Basic <API_KEY>"
+            },
+            {
+              "name": "Content-Disposition",
+              "value": "={{ 'attachment; filename=image-' + $now.format('yyyyMMdd-HHmmss') + '-' + Math.floor(Math.random() * 1000) + '.jpg' }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2256,
+        32
+      ],
+      "id": "a24a37ef-124e-4192-8c60-1648fdc2bd13",
+      "name": "Save Image"
+    },
+    {
+      "parameters": {
+        "content": "# Improve blog aesthetics and upload on WordPress",
+        "height": 560,
+        "width": 784,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2688,
+        -272
+      ],
+      "id": "d93aa3ab-39c1-42f0-9066-77bb89bb9ac1",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "# Create posts for social media and save in Google Sheet",
+        "height": 560,
+        "width": 816,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3552,
+        -272
+      ],
+      "id": "1babdbcb-7767-43b4-932a-c51504e9e517",
+      "name": "Sticky Note4"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data Mapping": {
+      "main": [
+        [
+          {
+            "node": "Create blog post agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Data Mapping",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create post in blotato",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model in Perplexity": {
+      "ai_tool": [
+        [
+          {
+            "node": "Create blog post agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Generate an image1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Blog Aesthetics ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a post": {
+      "main": [
+        [
+          {
+            "node": "Social media content creation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Create blog post agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SEO Optimization": {
+      "main": [
+        [
+          {
+            "node": "Image Prompts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Blog Tone Match": {
+      "main": [
+        [
+          {
+            "node": "SEO Optimization",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Prompts": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate an image1": {
+      "main": [
+        [
+          {
+            "node": "Save Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Blog Aesthetics ": {
+      "main": [
+        [
+          {
+            "node": "Create a post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Social media content creation": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create blog post agent": {
+      "main": [
+        [
+          {
+            "node": "Blog Tone Match",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create post in blotato": {
+      "main": [
+        [
+          {
+            "node": "Publish on twitter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Image": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "772e53d4-7f0c-4fd9-bd45-85886d32c9da",
+  "meta": {
+    "instanceId": "a8c5b3f7b06ab88c9bd40533a42c8fac4057dbe31e8479f6d8649a3b77c3c790"
+  },
+  "id": "kFqsY50gUO_0xbhut_mxy",
+  "tags": []
+}

@@ -1,0 +1,189 @@
+{
+    "name": "ARI - Agentic Revenue Intelligence Master Flow",
+    "nodes": [
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "field": "hours",
+                            "hoursInterval": 4
+                        }
+                    ]
+                }
+            },
+            "id": "trigger-cron",
+            "name": "Every 4 Hours",
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1,
+            "position": [
+                400,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "fileContent": "={{ $node[\"Read Config\"].json.content }}"
+            },
+            "id": "read-config",
+            "name": "Load Directives",
+            "type": "n8n-nodes-base.readBinaryFile",
+            "typeVersion": 1,
+            "position": [
+                600,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "resource": "search",
+                "operation": "all",
+                "query": "={{ $json.pain_signals.high_intensity.join(' OR ') }}",
+                "limit": 20
+            },
+            "id": "reddit-search",
+            "name": "Reddit Pain Signals",
+            "type": "n8n-nodes-base.reddit",
+            "typeVersion": 1,
+            "position": [
+                800,
+                300
+            ],
+            "credentials": {
+                "redditApi": {
+                    "id": "YOUR_CRED_ID",
+                    "name": "Reddit account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "model": "claude-3-opus-20240229",
+                "prompt": "={{ $node[\"Intent Prompt\"].json.content }} \n\n Analyze this post:\n {{ $json.title }} \n {{ $json.selftext }}",
+                "jsonOutput": true
+            },
+            "id": "llm-analyst",
+            "name": "ARI Intent Analyst",
+            "type": "n8n-nodes-base.anthropic",
+            "typeVersion": 1,
+            "position": [
+                1000,
+                300
+            ],
+            "credentials": {
+                "anthropicApi": {
+                    "id": "YOUR_CRED_ID",
+                    "name": "Anthropic account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "boolean": [
+                        {
+                            "value1": "={{ $json.is_expensive_problem }}",
+                            "value2": true
+                        }
+                    ],
+                    "number": [
+                        {
+                            "value1": "={{ $json.problem_score }}",
+                            "value2": 7,
+                            "operator": "largerEqual"
+                        }
+                    ]
+                }
+            },
+            "id": "filter-high-value",
+            "name": "High Value Only",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 1,
+            "position": [
+                1200,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "channel": "#ari-leads",
+                "text": "=🚀 **New Expensive Problem Found**\n\n**Problem:** {{ $json.pain_summary }}\n**Score:** {{ $json.problem_score }}/10\n**Mom Test Hook:** {{ $json.mom_test_angle }}\n\nLink: {{ $node[\"Reddit Pain Signals\"].json.url }}",
+                "otherOptions": {
+                    "includeLinkToWorkflow": true
+                }
+            },
+            "id": "slack-alert",
+            "name": "Alert Team",
+            "type": "n8n-nodes-base.slack",
+            "typeVersion": 1,
+            "position": [
+                1400,
+                200
+            ],
+            "credentials": {
+                "slackApi": {
+                    "id": "YOUR_CRED_ID",
+                    "name": "Slack account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "Every 4 Hours": {
+            "main": [
+                [
+                    {
+                        "node": "Load Directives",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Load Directives": {
+            "main": [
+                [
+                    {
+                        "node": "Reddit Pain Signals",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Reddit Pain Signals": {
+            "main": [
+                [
+                    {
+                        "node": "ARI Intent Analyst",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "ARI Intent Analyst": {
+            "main": [
+                [
+                    {
+                        "node": "High Value Only",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "High Value Only": {
+            "main": [
+                [
+                    {
+                        "node": "Alert Team",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                []
+            ]
+        }
+    }
+}

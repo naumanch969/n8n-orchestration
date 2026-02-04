@@ -1,0 +1,73 @@
+{
+    "project_name": "Agentic Revenue Intelligence (ARI)",
+    "version": "1.0.0",
+    "target_personas": [
+        {
+            "role": "SaaS Founder",
+            "pains": [
+                "churn",
+                "customer acquisition cost",
+                "scalability issues",
+                "technical debt"
+            ]
+        },
+        {
+            "role": "Sales Leader",
+            "pains": [
+                "low pipeline velocity",
+                "bad lead quality",
+                "inefficient outreach",
+                "data silos"
+            ]
+        }
+    ],
+    "pain_signals": {
+        "high_intensity": [
+            "looking for an alternative to",
+            "is there a tool for",
+            "how to automate",
+            "struggling with",
+            "tired of manually",
+            "budget issues with",
+            "too expensive",
+            "frustrated with"
+        ],
+        "medium_intensity": [
+            "recommendations for",
+            "best way to",
+            "any tips for",
+            "scaling problems",
+            "hire an agency vs tool"
+        ]
+    },
+    "mom_test_rules": {
+        "first_outreach_goal": "learning",
+        "forbidden_words": [
+            "sale",
+            "offer",
+            "discount",
+            "buy",
+            "service",
+            "pitch"
+        ],
+        "required_elements": [
+            "mention the specific post/comment",
+            "ask a question about the process, not the results",
+            "offer zero-commitment advice or insight"
+        ],
+        "max_sentences": 4
+    },
+    "re_annealing": {
+        "auto_skip_domains": [
+            "gmail.com",
+            "outlook.com"
+        ],
+        "auto_skip_keywords": [
+            "hiring",
+            "job",
+            "career",
+            "resume"
+        ],
+        "min_problem_score": 7
+    }
+}
