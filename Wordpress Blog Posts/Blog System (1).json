@@ -668,7 +668,7 @@
             },
             {
               "name": "blotato-api-key",
-              "value": "blt_laHss1J0Xuy2jDJEassynAjxmy9XhtIMCO+kGMfpnmA="
+              "value": "{{ $env.BLOTATO_API_KEY }}"
             }
           ]
         },
@@ -699,7 +699,7 @@
             },
             {
               "name": "blotato-api-key",
-              "value": "blt_laHss1J0Xuy2jDJEassynAjxmy9XhtIMCO+kGMfpnmA="
+              "value": "{{ $env.BLOTATO_API_KEY }}"
             }
           ]
         },

@@ -1,0 +1,237 @@
+{
+  "name": "Upwork",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "06eba06e-269a-448b-a1e8-a71df42b6eb5",
+      "name": "When chat message received",
+      "webhookId": "ea8124b9-8834-4fe4-8a24-485c810e5cb8"
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        288,
+        224
+      ],
+      "id": "d5353812-8784-488c-bab8-1a52467a41bb",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        112,
+        224
+      ],
+      "id": "38e4a3a4-7685-4e59-8c52-78107c927a02",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "SeDUiAJYJHLCS9Pi",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Call this tool to generate the Upwork application copy. The input will be the job description, and the output will be the Upwork application copy from the tool",
+        "workflowId": {
+          "__rl": true,
+          "value": "0hwE_OFNjW0qlWfYydlxg",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/0hwE_OFNjW0qlWfYydlxg",
+          "cachedResultName": "Upwork: Generate Application Copy"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        512,
+        224
+      ],
+      "id": "b585da8a-fc5d-4645-9437-b4f51abd3ec5",
+      "name": "Generate Application Copy"
+    },
+    {
+      "parameters": {
+        "description": "Call this tool to generate a Google Doc proposal for an Upwork Job. The input should be a string of an Upwork job post, and the output will be a proposal URL that you can use to fill in templates",
+        "workflowId": {
+          "__rl": true,
+          "value": "s0x1q_94QKP2MQaLD7t9l",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/s0x1q_94QKP2MQaLD7t9l",
+          "cachedResultName": "Upwork: Generate Google Doc"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        672,
+        224
+      ],
+      "id": "95f0fb4c-80e3-422a-856a-554f1e63527d",
+      "name": "Generate Google Doc"
+    },
+    {
+      "parameters": {
+        "description": "Call this tool to generate mermaid.js diagram code. The input will be an Upwork job description, and the output will be the mermaid diagram code. ",
+        "workflowId": {
+          "__rl": true,
+          "value": "6Wlw6UIBmxe0r39IWKIMU",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/6Wlw6UIBmxe0r39IWKIMU",
+          "cachedResultName": "Upwork: Generate Marmaid Code"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        832,
+        224
+      ],
+      "id": "32575eca-7d66-42ee-8bce-d27964e20b34",
+      "name": "Generate Marmaid Code"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are an intelligent Upwork assistant. Your role is to analyze an Upwork job description and generate the required assets, such as Mermaid diagrams, Google Docs content, and tailored Upwork application proposals.\n\nWhen you receive an Upwork job description, you *must*  generate a Mermaid diagram, a Google Doc, and an Upwork application. You must replace the $$$ with the Google Doc proposal link in plain text (https://www.....)"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "7f34c409-5b97-47a0-8aab-2a204aced165",
+      "name": "Upwork Agent for AI Automation"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Upwork Agent for AI Automation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Upwork Agent for AI Automation",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Upwork Agent for AI Automation",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Application Copy": {
+      "ai_tool": [
+        [
+          {
+            "node": "Upwork Agent for AI Automation",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Google Doc": {
+      "ai_tool": [
+        [
+          {
+            "node": "Upwork Agent for AI Automation",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Marmaid Code": {
+      "ai_tool": [
+        [
+          {
+            "node": "Upwork Agent for AI Automation",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "a5b139a6-8cc8-4a00-b0a3-4b5d490ca069",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a8c5b3f7b06ab88c9bd40533a42c8fac4057dbe31e8479f6d8649a3b77c3c790"
+  },
+  "id": "3esj65tGVK3bd-oDhZk1F",
+  "tags": []
+}

@@ -1,0 +1,143 @@
+{
+  "name": "Upwork: Generate Marmaid Code",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -416,
+        -16
+      ],
+      "id": "c7f6f713-f637-4187-9d11-2a5b3d218cb3",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c22406a7-5fb7-4f9a-aa4d-14b88e3cb456",
+              "name": "mermaidCode",
+              "value": "={{ $json.output[0].content[0].text.message }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        -16
+      ],
+      "id": "4e0de757-d1eb-4911-b426-e86a04af653d",
+      "name": "Set 'mermaidCode' field"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are a helpful, intelligent mermaid js code writer."
+            },
+            {
+              "content": "=Your task is to take as input an Upwork job description and return as output a Mermaid diagram that I can visualize using a subsequent Mermaid.js tool.\n\nOutput your results in plaintext using Mermaid code formatting. Don’t output anything but the Mermaid diagram code.\n\nHere’s an example of what your output should look like:\n\ngraph TD; \n  A-->B; \n  A-->C; \n  B-->D; \n  C-->D;\n\nRules:\n\nYou only output flowcharts. Nothing else. No sequence diagrams, no Gantt charts—only flowcharts.\n\nDo not output any accessory formatting information, like ```mermaid.\n\nYour first character should be g."
+            },
+            {
+              "content": "={{ $json.query }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema"
+            }
+          },
+          "temperature": 0.7
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        -160,
+        -16
+      ],
+      "id": "475f5fae-42df-45af-a91c-042fbd5992a0",
+      "name": "Generate Mermaid Code",
+      "credentials": {
+        "openAiApi": {
+          "id": "SeDUiAJYJHLCS9Pi",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "query": "We are looking for a high-level Senior AI & Automation Engineer to architect and build next-generation Multimodal Agentic Workflows. We need someone who understands that modern automation isn't just about moving data from A to B, but about using Large Language Models (LLMs) to make decisions, categorize content, and handle unstructured data autonomously. An expert who builds autonomous systems capable of reasoning, decision-making, and performing complex Generative AI tasks (Image, Voice, and Video) within a unified automation framework.\n\nKey Responsibilities\n- Workflow Architecture: Design and implement complex workflows in n8n, Zapier, or Make.com.\n- LLM Integration: Integrate OpenAI (GPT-4o), Claude 3.5, or Gemini into workflows for intelligent decision-making and content processing.\n- Agentic Frameworks: Build systems where AI agents can \"use tools\" (API calls, web searches) to complete multi-step tasks.\n- Data Routing: Using AI for classification and sentiment analysis to route leads or support tickets within our stack (e.g., HubSpot/Slack).\n- API Management: Connecting custom endpoints and managing authentication between various SaaS platforms.\n- Multimodal Generation: Integrate generative pipelines for:\n  - Image: Stable Diffusion, Midjourney, or DALL-E 3.\n  - Voice: ElevenLabs, Play.ht, or OpenAI TTS.\n  - Video: HeyGen, Runway, or Sora.\n- Autonomous Agents: Architect agents that use tools, browse the web, and execute multi-step logic autonomously.\n- LLM & Vision Integration: Implement reasoning chains using GPT-4o, Claude 3.5, and vision models for media analysis.\n- Backend & Infrastructure: Maintain APIs using FastAPI/Django and manage memory via Vector Databases (Pinecone, Weaviate).\n\nRequired Skills & Experience\n- Expertise in n8n (custom nodes, advanced expressions) and Python-based automation.\n- Deep experience with Generative AI APIs across all modalities (Text, Image, Audio, Video).\n- Strong backend engineering: FastAPI/Django, Docker, and robust API design.\n- Proficiency in NLP/CV libraries (OpenCV, YOLO, Transformers, LangChain).\n- Experience building Autonomous Agents with recursive logic or specialized frameworks (CrewAI, AutoGPT).\n- Strong understanding of JSON, Webhooks, and REST APIs.\n- Experience with RAG (Retrieval-Augmented Generation) and vector databases is a major plus.\n\nApplication Instructions\nPlease start your proposal with the word \"MULTIMODAL\" so I know you’ve read the full description.\n\nIn your proposal, please answer:\n1. Describe an autonomous agent you've built that uses external tools to complete a goal.\n2. How do you pipeline image or video generation into a high-volume automated workflow?\n3. What is your strategy for managing state/memory in multi-stage agentic loops?"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Generate Mermaid Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Mermaid Code": {
+      "main": [
+        [
+          {
+            "node": "Set 'mermaidCode' field",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "ca061c08-5b79-4221-ab92-075d8d303e25",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a8c5b3f7b06ab88c9bd40533a42c8fac4057dbe31e8479f6d8649a3b77c3c790"
+  },
+  "id": "6Wlw6UIBmxe0r39IWKIMU",
+  "tags": [
+    {
+      "updatedAt": "2026-01-09T07:05:57.245Z",
+      "createdAt": "2026-01-09T07:05:57.245Z",
+      "id": "k3xlm8NSXEKWQRNe",
+      "name": "Upwork"
+    }
+  ]
+}

@@ -1,0 +1,166 @@
+{
+  "name": "Upwork: Generate Application Copy",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "dcddcbc8-34f1-460b-9f34-740586c27a1f",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3a0ce0da-7492-4c37-b9f4-1b54bbcb4657",
+              "name": "response",
+              "value": "={{ $json.output[0].content[0].text.message }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        768,
+        0
+      ],
+      "id": "da3a3609-49e3-4ca8-b746-7ea4903b783d",
+      "name": "Set 'response' field"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "acc2f01c-dfec-499e-9bdd-6ae27b811ac9",
+              "name": "aboutMe",
+              "value": "I’m an automation engineer and AI systems builder specializing in workflow automation, AI agents, and system integrations using tools like n8n, APIs, webhooks, and LLMs. I help founders, agencies, and service businesses eliminate manual work by building reliable automation for job monitoring, outreach, CRM pipelines, notifications (WhatsApp/Email/Slack), and data processing. I design workflows like a software engineer—clean logic, proper error handling, scalable architecture, and real business outcomes—so systems run smoothly without babysitting. If you want smart automation that actually works in production, not just connected blocks, I’m the right fit.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "abea3608-1552-4303-92a7-c6d3e226c70d",
+      "name": "Set 'query' field"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are a helpful, intelligent Upwork application writer."
+            },
+            {
+              "content": "=I'm an automation specialist applying to jobs on freelance platforms.\n\nYour task is to take as input an Upwork job description and return as output a customized proposal.\n\nHigh-performing proposals are typically templated as follows:\n\n```\n\nHi, I do {thing} all the time. Am so confident I'm the right fit for you that I just created a workflow diagram + a demo of your {thing} in no-code: $$$\n\nAbout me: I'm a {relevantJobDescription} that has done {coolRelevantThing}. Of note, {otherCoolTieIn}.\n\nHappy to do this for you anytime—just respond to this proposal (else I don't get a chat window).\n\nThank you!\n\n```\n\nOutput your results in JSON using this format:\n\n{\"proposal\":\"Your proposal\"}\n\nRules:\n- $$$ is what we're using to replace links later on, so leave that untouched.\n- Write in a casual, Spartan tone of voice.\n- Don't use emojis or flowery language.\n- If there's a name included somewhere in the description, add it after \"Hi\".\n\n\nSome facts about me for the personalization: {{ $json.aboutMe }}\n"
+            },
+            {
+              "content": "={\"jobDescription: \"{{ $('When Executed by Another Workflow').item.json.query }}\"}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema"
+            }
+          },
+          "temperature": 0.7
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "361062d7-b005-4043-b47f-c50638dae782",
+      "name": "Generate Application Copy",
+      "credentials": {
+        "openAiApi": {
+          "id": "SeDUiAJYJHLCS9Pi",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Set 'query' field",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set 'query' field": {
+      "main": [
+        [
+          {
+            "node": "Generate Application Copy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Application Copy": {
+      "main": [
+        [
+          {
+            "node": "Set 'response' field",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "278c60f6-5828-404c-be7d-1f43eb161aa2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a8c5b3f7b06ab88c9bd40533a42c8fac4057dbe31e8479f6d8649a3b77c3c790"
+  },
+  "id": "0hwE_OFNjW0qlWfYydlxg",
+  "tags": [
+    {
+      "updatedAt": "2026-01-09T07:05:57.245Z",
+      "createdAt": "2026-01-09T07:05:57.245Z",
+      "id": "k3xlm8NSXEKWQRNe",
+      "name": "Upwork"
+    }
+  ]
+}

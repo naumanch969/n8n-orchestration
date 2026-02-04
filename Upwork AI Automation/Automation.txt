@@ -1,0 +1,103 @@
+About Me: 
+I’m an automation engineer and AI systems builder specializing in workflow automation, AI agents, and system integrations using tools like n8n, APIs, webhooks, and LLMs. I help founders, agencies, and service businesses eliminate manual work by building reliable automation for job monitoring, outreach, CRM pipelines, notifications (WhatsApp/Email/Slack), and data processing. I design workflows like a software engineer—clean logic, proper error handling, scalable architecture, and real business outcomes—so systems run smoothly without babysitting. If you want smart automation that actually works in production, not just connected blocks, I’m the right fit.
+
+
+Proposal Copy AI Prompt: 
+I'm an automation specialist applying to jobs on freelance platforms.
+
+Your task is to take as input an Upwork job description and return as output a customized proposal.
+
+High-performing proposals are typically templated as follows:
+
+```
+
+Hi, I do {thing} all the time. Am so confident I'm the right fit for you that I just created a workflow diagram + a demo of your {thing} in no-code: $$$
+
+About me: I'm a {relevantJobDescription} that has done {coolRelevantThing}. Of note, {otherCoolTieIn}.
+
+Happy to do this for you anytime—just respond to this proposal (else I don't get a chat window).
+
+Thank you!
+
+```
+
+Output your results in JSON using this format:
+
+{"proposal":"Your proposal"}
+
+Rules:
+- $$$ is what we're using to replace links later on, so leave that untouched.
+- Write in a casual, Spartan tone of voice.
+- Don't use emojis or flowery language.
+- If there's a name included somewhere in the description, add it after "Hi".
+
+
+Some facts about me for the personalization: {{ $json.aboutMe }}
+
+
+
+
+
+
+Google Doc Proposal Gen AI Prompt:
+I'm an automation specialist applying to jobs on freelance platforms.
+
+Your task is to take as input an Upwork job description and return as output JSON for a customized proposal (which I'll upload to Google Docs). | High-performing proposals are typically templated as follows:
+
+```
+
+# {titleOfSystem}
+## {briefExplanationOfSystem}
+
+Hi. As mentioned, I'm so confident I'm the right fit for this I went ahead and 
+created a proposal for you, including a step-by-step of how I'd do it.
+
+I've done the below many times and working with {specificPartOfTheirRequest} is 
+actually one of my favorite things to do. Talk about serendipity!
+
+Anyway, here's how we'll build {paraphrasedSystem}:
+{stepByStepBulletPoints}
+
+So basically, {leftToRightFlowWithArrows}.
+
+A little about me:
+{aboutMeBulletPoints}
+
+To be upfront: my goal is to work with you on a long-term retainer, since I find it 
+aligns incentives and lets me help clients better. So I'd treat everything we do 
+together as foundational, and help you build systems that drive revenue/maximize cost 
+savings.
+
+I am really confident I can blow this out of the park for you, so if this sounds like 
+something you're into, just respond to my proposal on Upwork & we'll take it from 
+there.
+
+Thank you for your time!
+
+```
+
+Output your results in JSON using this format:
+
+{ 
+  "titleOfSystem": "", 
+  "briefExplanationOfSystem": "", 
+  "specificPartOfTheirRequest": "", 
+  "stepByStepBulletPoints": "", 
+  "leftToRightFlowWithArrows": "", 
+  "aboutMeBulletPoints": "", 
+}
+
+
+Rules:
+- Write in a casual, spartan tone of voice.
+- Don't use emojis or flowery language.
+- If there's a name included somewhere in the description, add it for personalization purposes.
+- Return "stepByStepBulletPoints" and "aboutMeBulletPoints" as strings, and delimit each bullet point with a \n and make sure it includes a -
+- In "aboutMeBulletPoints", prefer to mention social proof that includes $ and numbers.
+- For "leftToRightFlowWithArrows", write a simplified left to right flow delimited by "->" strings. For instance, we receive a new email -> we add that to the CRM -> we send an email to the new lead.
+- Use first-person "I" language, like "I'd streamline..." for bullet points etc.
+
+Some facts about me for the personalization: {{ $json.aboutMe }}
+
+Note: You must return a single valid JSON object that can be parsed by JSON.parse().
+

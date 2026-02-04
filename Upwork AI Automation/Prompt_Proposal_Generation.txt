@@ -1,0 +1,30 @@
+I'm a Software Architect and Automation Specialist applying to jobs on freelance platforms.
+
+Your task is to take as input an Upwork job description and return as output a customized proposal.
+
+High-performing proposals are typically templated as follows:
+
+```
+
+Hi [Name], I build systems like this all the time. Am so confident I'm the right fit that I went ahead and architected a roadmap/demo for you: $$$
+
+About me: I'm a {TechnicalRole} that has built {SpecificRelevantProject}. Of note, {SpecificRelevantAchievement}.
+
+Happy to deliver this for you properly—just respond to this proposal (else I don't get a chat window).
+
+Thank you!
+
+```
+
+Output your results in JSON using this format:
+
+{"proposal":"Your proposal"}
+
+Rules:
+- $$$ is a placeholder for a link, leave perfectly intact.
+- Write in a casual, Spartan, extremely confident tone.
+- Don't use emojis or flowery language (e.g. no "I hope this finds you well").
+- If there's a name included in the description, add it after "Hi".
+- {{TechnicalRole}} should adapt to the job: if they need a Dev, say "Product Architect"; if Automation, say "Automation Engineer".
+
+**My Background Context:** {{ $json.aboutMe }}

@@ -1,0 +1,135 @@
+About Me:
+I am a Software Architect and Full-Stack problem solver who focuses on business outcomes, not just code. While I have deep expertise in MERN, Next.js, WordPress, and Python/LangChain, I view these tools as means to an end: delivering reliable, scalable systems that drive revenue. Whether you need a complex SaaS platform built from scratch, seamless AI integrations, robust automation pipelines, or critical bug fixes in legacy code, I handle the entire lifecycle. My goal is to abstract away the technical complexity and deliver a high-performance product that works flawlessly, allowing you to focus on growing your business.
+
+Portfolio Projects Reference (for context):
+- QanoonMate (AI Legal Assistant with Chatbot & Summarization)
+- TrainityHub (AI-Powered Fitness B2B SaaS)
+- FableFrame (AI Story Generation Platform)
+- GrowCRM (Agency Management Dashboard)
+- DoctorGuide (AI Healthcare Diagnosis Assistant)
+- Evaluate (Employee Performance Evaluation System)
+- SwiftCart (Multi-Store E-Commerce Platform)
+- Syncboard (Real-time Collaborative Whiteboard)
+- AdultEdPro (E-learning & Certification Platform)
+- CodeGem (Social Media for Developers)
+- Potato Disease Detection (AI Computer Vision Model)
+- InterX (Team Collaboration & Messaging)
+- Oteogo (Gamified Educational Platform)
+- Musif (Music Sharing Platform)
+- VoxalEdge (Tech Services Company Site)
+- MentoroExpert (LMS Platform)
+- MemoLink (Journal & Media Manager)
+- NIMUN (Event Registration System)
+- TEDxNUST (Event Website)
+- UpstateEternityHealth (Healthcare Provider Site)
+
+Proposal Copy AI Prompt: 
+I'm a Software Architect and Automation Specialist applying to jobs on freelance platforms.
+
+Your task is to take as input an Upwork job description and return as output a customized proposal.
+
+High-performing proposals are typically templated as follows:
+
+```
+
+Hi [Name], I build systems like this all the time. Am so confident I'm the right fit that I went ahead and architected a roadmap/demo for you: $$$
+
+About me: I'm a {TechnicalRole} that has built {SpecificRelevantProject}. Of note, {SpecificRelevantAchievement}.
+
+Happy to deliver this for you properly—just respond to this proposal (else I don't get a chat window).
+
+Thank you!
+
+```
+
+Output your results in JSON using this format:
+
+{"proposal":"Your proposal"}
+
+Rules:
+- $$$ is a placeholder for a link, leave perfectly intact.
+- Write in a casual, Spartan, extremely confident tone.
+- Don't use emojis or flowery language (e.g. no "I hope this finds you well").
+- If there's a name included in the description, add it after "Hi".
+- {{TechnicalRole}} should adapt to the job: if they need a Dev, say "Product Architect"; if Automation, say "Automation Engineer".
+
+**My Background Context:** {{ $json.aboutMe }}
+
+
+Google Doc Generator Prompt:
+I'm a Senior Full-Stack Engineer and Product Architect applying to jobs on freelance platforms.
+
+Your task is to take as input an Upwork job description and return as output JSON for a customized technical roadmap (which I'll upload to Google Docs).
+
+High-performing proposals are typically templated as follows:
+
+```
+
+# {titleOfSystem}
+## {briefExplanationOfSystem}
+
+Hi. As mentioned, I'm so confident I'm the right fit for this I went ahead and 
+drafted a technical implementation plan for you, including a step-by-step of how I'd build it.
+
+I've built systems like this many times and working with {specificPartOfTheirRequest} is 
+actually one of my strongest areas. Talk about serendipity!
+
+Anyway, here's how we'll build {paraphrasedSystem}:
+{stepByStepBulletPoints}
+
+So basically, the data flow looks like this:
+{leftToRightFlowWithArrows}
+
+A little about me:
+{aboutMeBulletPoints}
+
+To be upfront: my goal is to work with you on a long-term basis, building maintainable 
+software that scales. I treat everything we do as foundational, helping you build 
+robust systems that drive revenue.
+
+I am really confident I can blow this out of the park for you, so if this sounds like 
+something you're into, just respond to my proposal on Upwork & we'll take it from 
+there.
+
+Thank you for your time!
+
+```
+
+Output your results in JSON using this format:
+
+{ 
+  "titleOfSystem": "", 
+  "briefExplanationOfSystem": "", 
+  "specificPartOfTheirRequest": "", 
+  "stepByStepBulletPoints": "", 
+  "leftToRightFlowWithArrows": "", 
+  "aboutMeBulletPoints": "", 
+}
+
+
+Rules:
+- Write in a casual, spartan tone of voice.
+- **FORBIDDEN WORDS:** Do NOT use words like "tailor," "seamless," "pixel-perfect," "cutting-edge," "bespoke," "delve," "leverage," or "comprehensive." These sound like AI.
+- Use plain, direct English (e.g., "Customize" instead of "Tailor," "Works well" instead of "Seamless").
+- Don't use emojis or flowery language.
+- If there's a name included somewhere in the description, add it for personalization purposes.
+- Return "stepByStepBulletPoints" and "aboutMeBulletPoints" as strings, and delimit each bullet point with a \n and make sure it includes a -
+- In "aboutMeBulletPoints", mention specific relevant projects from my background that prove I can do this job. Use typical SaaS/Dev metrics where possible.
+- In "stepByStepBulletPoints", focus on the Technical Architecture, Tech Stack (Next.js/Node/DB), and Development Phases.
+- For "leftToRightFlowWithArrows", write a simplified data flow. For instance: User -> Next.js Frontend -> Node.js API -> MongoDB.
+- Use first-person "I" language, like "I'd architect..." for bullet points etc.
+
+Some facts about me for the personalization: {{ $json.aboutMe }}
+
+CRITICAL OUTPUT REQUIREMENTS (MANDATORY)
+-> Output must be raw JSON only
+-> Do NOT include markdown, explanations, comments, or code fences
+-> Do NOT include any text before or after the JSON object
+-> The response must be directly parsable by JSON.parse() without modification
+
+JSON STRING RULES (VERY IMPORTANT)
+-> All values must be strings
+-> No literal line breaks inside strings
+-> If you need line breaks, use escaped newlines (\\n) only
+-> Do not use smart quotes — use standard double quotes (")
+-> Do not include trailing commas

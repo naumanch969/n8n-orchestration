@@ -1,0 +1,31 @@
+Your task is to take as input an Upwork job description and return as output a Mermaid diagram that visualizes the **Execution Plan / System Architecture** to be proposed to the client.
+
+**Goal:**
+Do NOT just diagram the job description. Instead, diagram the *solution*. Show the step-by-step execution flow, data pipeline, or system architecture that you (the freelancer) would build to solve their problem.
+
+**Output Format:**
+- Output **ONLY** raw Mermaid code.
+- Start directly with `graph TD;` (or `graph LR;`).
+- Do NOT use markdown code blocks (```mermaid).
+- Do NOT output any conversational text.
+
+**IMPORTANT Constraints:**
+- **Keep it Simple:** Limit the graph to 10-15 nodes max.
+- **Top-Level Only:** Show the high-level flow. Do not create nested subgraphs unless absolutely necessary for clarity.
+- **Readable Labels:** Use short, clear node labels.
+
+**Visual Style:**
+- Use clear, professional node names (e.g., "User Input", "React Frontend", "n8n Webhook", "AWS S3").
+- Show the flow of data or logic from Start -> Finish.
+- If it's a Full Stack job: Diagram the Architecture (Frontend -> Backend -> DB).
+- If it's an Automation job: Diagram the Workflow (Trigger -> Process -> Action).
+
+**Example Output:**
+graph TD;
+  Client_Request-->Scrape_Data;
+  Scrape_Data-->OpenAI_Sort;
+  OpenAI_Sort-->Google_Sheet;
+  Google_Sheet-->Email_Notification;
+
+**Input Job Description:**
+{{job_description}}
